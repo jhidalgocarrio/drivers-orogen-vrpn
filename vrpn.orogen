@@ -1,0 +1,48 @@
+name "vrpn"
+# Optionally declare the version number
+version "0.1"
+
+# Libraries
+using_library "vrpn"
+
+# If new data types need to be defined, they have to be put in a separate C++
+# header, and this header will be loaded here
+import_types_from "vrpnTypes.hpp"
+import_types_from "std"
+import_types_from "base"
+
+# Declare a new task context (i.e., a component)
+# The corresponding C++ class can be edited in tasks/Task.hpp and
+# tasks/Task.cpp, and will be put in the vrpn namespace.
+task_context "Task" do
+    # This is the default from now on, and should not be removed. Rock will
+    # transition to a setup where all components use a configuration step.
+    default_activity :periodic, 0.01
+    needs_configuration
+
+    #*************************
+    #****Task Properties *****
+    #*************************
+    property "server", "/std/string"
+            doc "Server name or ip address"
+    property "port", "/std/string"
+            doc "Connection port"
+    property "use_server_time", "bool"
+            doc "Use server time (false by default)"
+    property "tracker_name", "/std/string"
+            doc "Tracker name"
+    property "source_frame", "/std/string", "world"
+            doc "from frame for the transformer"
+
+    property "delta_trans", "/base/Pose"
+            doc "Delta transformation (T_m_c) to apply to the mocap incoming (T_w_m) transformation T_w_c = T_w_m * T_m_c"
+
+
+    #******************************
+    #******* Output Ports *********
+    #******************************
+    output_port 'pose_sample', '/base/samples/RigidBodyState'
+            doc "pose of the configured segment."
+
+end
+

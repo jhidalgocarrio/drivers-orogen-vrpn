@@ -1,0 +1,11 @@
+<package>
+  <description brief="Virtual Reality Peripheral Network">
+  Orogen component for the Virtual Reality Peripheral Network
+  </description>
+  <author>Javier Hidalgo Carrio/havyhidalgo@gmail.com</author>
+  <license>LGPL v2 or later</license>
+  <url>https://github.com/vrpn/vrpn/wiki</url>
+  <depend package="base/cmake" />
+  <depend package="drivers/vrpn" />
+  <depend package="base/orogen/types" />
+</package>
