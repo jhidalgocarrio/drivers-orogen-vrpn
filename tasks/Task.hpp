@@ -36,10 +36,13 @@ namespace vrpn{
         typedef std::shared_ptr<Task> Ptr;
 
     protected:
+        /** Connection variables **/
         std::string host;
         std::string tracker_name;
         TrackerRemotePtr tracker;
         ConnectionPtr connection;
+
+        bool valid_data;
 
         /** Outpout port pose **/
         base::Time previous;
