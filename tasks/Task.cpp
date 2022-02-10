@@ -102,7 +102,7 @@ void VRPN_CALLBACK Task::handle_pose(void *task, const vrpn_TRACKERCB tracker_po
     RTT::log(RTT::Info) << "\tquat: "<< tracker_pose.quat[0] << "," <<tracker_pose.quat[1] << "," <<tracker_pose.quat[2]<<","<<tracker_pose.quat[3]<<RTT::endlog();
     rbs.time = ts;
     rbs.position <<  tracker_pose.pos[0],  tracker_pose.pos[1],  tracker_pose.pos[2]; // x y z
-    rbs.orientation = base::Quaterniond(tracker_pose.quat[0],  tracker_pose.quat[1],  tracker_pose.quat[2], tracker_pose.quat[3]); //x y z w
+    rbs.orientation = base::Quaterniond(tracker_pose.quat[3],  tracker_pose.quat[0],  tracker_pose.quat[1], tracker_pose.quat[2]); //quat is coming in w x y z , Eigen::quaterniond expects x y z w
 
 }
 void VRPN_CALLBACK Task::handle_twist(void *task, const vrpn_TRACKERVELCB tracker_twist)
