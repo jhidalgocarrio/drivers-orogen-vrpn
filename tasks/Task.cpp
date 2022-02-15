@@ -50,6 +50,8 @@ bool Task::startHook()
     this->tracker->shutup = false;
     RTT::log(RTT::Info) << " [STABLISHED]" << RTT::endlog();
 
+    this->valid_data = false;
+
     return true;
 }
 void Task::updateHook()
@@ -66,13 +68,13 @@ void Task::updateHook()
         if (strcmp(_tracker_name.value().c_str(), this->connection->sender_name(i)) == 0)
         {
             //std::cout<<"["<<i<<"] Name: "<<this->connection->sender_name(i)<<std::endl;
-            //if (this->valid_data)
+            if (this->valid_data)
             {
                 this->pose.setTransform(this->pose.getTransform() * _delta_trans.value().toTransform());
                 RTT::log(RTT::Info) << "[VRPN] previous: "<< previous.toMilliseconds()<<" new: "<<  this->pose.time.toMilliseconds() <<" delta_t: " << (this->pose.time.toMilliseconds()-previous.toMilliseconds())/1000.0 <<RTT::endlog();
                 _pose_sample.write(this->pose);
                 this->previous = this->pose.time;
-                //this->valid_data = false;
+                this->valid_data = false;
             }
         }
         i++;
@@ -118,12 +120,15 @@ void VRPN_CALLBACK Task::handle_pose(void *task, const vrpn_TRACKERCB tracker_po
     rbs.time = ts;
     rbs.position <<  tracker_pose.pos[0],  tracker_pose.pos[1],  tracker_pose.pos[2]; // x y z
     rbs.orientation = base::Quaterniond(tracker_pose.quat[3],  tracker_pose.quat[0],  tracker_pose.quat[1], tracker_pose.quat[2]); //quat is coming in w x y z , Eigen::quaterniond expects x y z w
+    static_cast<Task*>(task)->valid_data = true;
+
 }
 void VRPN_CALLBACK Task::handle_twist(void *task, const vrpn_TRACKERVELCB tracker_twist)
 {
     ::base::samples::RigidBodyState &rbs = static_cast<Task* >(task)->pose;
     rbs.velocity << tracker_twist.vel[0], tracker_twist.vel[1], tracker_twist.vel[2];
     RTT::log(RTT::Info) << "\tlin_velocity: "<< tracker_twist.vel[0] << "," <<tracker_twist.vel[1] << "," <<tracker_twist.vel[2]<<RTT::endlog();
+    static_cast<Task*>(task)->valid_data = true;
 }
 
 void VRPN_CALLBACK Task::handle_accel(void *data, const vrpn_TRACKERACCCB tracker_accel)
