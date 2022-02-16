@@ -8,4 +8,5 @@
   <depend package="base/cmake" />
   <depend package="drivers/vrpn" />
   <depend package="base/orogen/types" />
+  <tags>stable</tags> <!--Release -->
 </package>
