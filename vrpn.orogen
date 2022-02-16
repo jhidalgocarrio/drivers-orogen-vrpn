@@ -17,7 +17,7 @@ import_types_from "base"
 task_context "Task" do
     # This is the default from now on, and should not be removed. Rock will
     # transition to a setup where all components use a configuration step.
-    default_activity :periodic, 0.01
+    default_activity :periodic, 0.0066
     needs_configuration
 
     #*************************
